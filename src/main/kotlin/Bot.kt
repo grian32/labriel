@@ -426,7 +426,10 @@ class Bot(private val env: String, private val discordToken: String, driver: Jdb
         val user = getUser(database, cmd.user.id.toString()) ?: return
         val currentRank =
             Ranks.entries.lastOrNull { user.activity_score >= it.requirement } ?: return
-        val nextRank = Ranks.entries.firstOrNull { it.requirement > user.activity_score } ?: return
+        val nextRank = Ranks.entries.firstOrNull { it.requirement > user.activity_score } ?: run {  
+            cmd.createImmediateResponder().setContent("if u made it this far log off").respond()
+            return
+        }
         val diff = nextRank.requirement - currentRank.requirement
         val remaining = nextRank.requirement - user.activity_score
         val progress = diff - remaining
