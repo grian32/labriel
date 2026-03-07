@@ -1,4 +1,4 @@
-FROM openjdk:21-jdk-slim AS builder
+FROM eclipse-temurin:21-jdk-alpine AS builder
 
 WORKDIR /labriel
 
@@ -12,7 +12,8 @@ COPY settings.gradle.kts .
 
 RUN ./gradlew shadowJar --no-daemon
 
-FROM openjdk:21-jdk-slim
+FROM eclipse-temurin:21-jdk-alpine
+RUN mkdir -p data
 
 COPY --from=builder /labriel/build/libs/labriel.jar /labriel.jar
 
